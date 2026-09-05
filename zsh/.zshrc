@@ -79,46 +79,15 @@ eval "$(navi widget zsh)"
 # Edit line in vim with ctrl-e:
 autoload edit-command-line; zle -N edit-command-line
 
-# Auto startx depending on the tty
-# if [[ -z $DISPLAY ]] && (( $EUID != 0 )) {
-#     [[ ${TTY/tty} != $TTY ]] && (( ${TTY:8:1} <= 3 )) &&
-#         exec startx 1>~/.log/xsession-errors 2>&1 &
-# }
-
-TTY="$(tty)"
-# Iniciar tmux al abrir una nueva terminal
-if command -v tmux &> /dev/null && [ -z "$TMUX" ] && [ "$TERM" = "xterm-ghostty" ]; then
-    tmux has-session -t media 2>/dev/null || tmux new-session -d -s media -c /home/logico/music "cmus"
-    tmux has-session -t tools 2>/dev/null || tmux new-session -d -s tools -c /home/logico "lazydocker"
-    tmux new -A -s "main"
-fi
-
 eval "$(dircolors ~/.dir_colors)"
 complete -C '/usr/local/bin/aws_completer' aws
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-
-# pnpm
-export PNPM_HOME="/home/logico/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 
 zstyle ':completion:*' completer _extensions _complete _approximate
 zstyle ':completion:*' squeeze-slashes true
 zstyle ':completion:*' file-sort change reverse
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path /tmp/.zcompcache
-
-source <(kubectl completion zsh)
-
-# opencode
-export PATH=/home/logico/.opencode/bin:$PATH
 
 source ~/.config/zsh/ps1.sh
 source ~/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
