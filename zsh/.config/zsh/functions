@@ -1,0 +1,199 @@
+function zle-line-init zle-keymap-select {
+  RPS1="%{$fg_bold[white]%}%{$bg[black]%}${${KEYMAP/vicmd/ NORMAL }/(main|viins)/}%{$reset_color%}"
+  RPS2=$RPS1
+  if [ $KEYMAP = vicmd ]; then
+    echo -ne "$ZSH_INSERT_CURSOR"
+  else
+    # the insert mode for vi
+    echo -ne "$ZSH_NORMAL_CURSOR"
+  fi
+  zle reset-prompt
+}
+
+### COMMIT RÁPIDO
+# usage: gitit <comment>
+function gcm() {
+  git add . && git commit -S -m "$1"
+}
+
+
+function gg() {
+  lazygit
+  zle reset-prompt
+  echo -ne "$ZSH_INSERT_CURSOR"
+}
+
+### PUSH RÁPIDO
+# usage: pushit
+function gps() {
+  $BRANCH=git rev-parse --abbrev-ref HEAD 1> /dev/null
+  git push -u origin $BRANCH
+}
+
+### ARCHIVE EXTRACTION
+# usage: ex <file>
+ex ()
+{
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xjf $1   ;;
+      *.tar.gz)    tar xzf $1   ;;
+      *.tgz)       tar xzf $1   ;;
+      *.bz2)       bunzip2 $1   ;;
+      *.rar)       unrar x $1   ;;
+      *.gz)        gunzip $1    ;;
+      *.tar)       tar xf $1    ;;
+      *.tbz2)      tar xjf $1   ;;
+      *.tgz)       tar xzf $1   ;;
+      *.zip)       unzip $1     ;;
+      *.Z)         uncompress $1;;
+      *.7z)        7z x $1      ;;
+      *.deb)       ar x $1      ;;
+      *.tar.xz)    tar xf $1    ;;
+      *.tar.zst)   unzstd $1    ;;
+      *)           echo "'$1' cannot be extracted via ex()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+fkill() {
+    local pid
+    if [ "$UID" != "0" ]; then
+        pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+    else
+        pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+    fi
+
+    if [ "x$pid" != "x" ]
+    then
+        echo $pid | xargs kill -${1:-9}
+    fi
+}
+
+
+# Buscar dentro de archivos
+# fif <busqueda>
+fif() {
+  if [ ! "$#" -gt 1 ]; then echo "Need a string to search for!"; return 1; fi
+  rg --files-with-matches --no-messages $1 | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 $1 || rg --ignore-case --pretty --context 10 $1 {}"
+}
+
+# This speeds up pasting w/ autosuggest
+# https://github.com/zsh-users/zsh-autosuggestions/issues/238
+pasteinit() {
+  OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
+  zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
+}
+
+pastefinish() {
+  zle -N self-insert $OLD_SELF_INSERT
+}
+
+# integracion de fzf con autojump
+j() {
+  if [[ "$#" -ne 0  ]]; then
+    cd $(autojump $@)
+    return
+  fi
+  cd "$(autojump -s | sed '/_____/Q; s/^[0-9,.:]*\s*//' |  fzf --height 40% --reverse --inline-info)" 
+}
+
+# o [FUZZY PATTERN] - Abre el archivo seleccionado en un editor VIM ya abierto
+o() {
+  local IFS=$'\n'
+  local files=()
+  files=(
+    "$(fzf-tmux \
+          --query="$1" \
+          --multi \
+          --select-1 \
+          --exit-0 \
+          --preview="${FZF_PREVIEW_CMD}" \
+          --preview-window='right:hidden:wrap' \
+          --bind=ctrl-v:toggle-preview \
+          --bind=ctrl-x:toggle-sort \
+          --header='(view:ctrl-v) (sort:ctrl-x)'
+    )"
+  ) || return
+  "$HOME/dots/scripts/vim-remote.sh" "${files[@]}"
+}
+
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+# #   - Bypass fuzzy finder if there's only one match (--select-1)
+# #   - Exit if there's no match (--exit-0)
+fe() {
+  local IFS=$'\n'
+  local files=()
+  files=(
+    "$(fzf-tmux \
+          --query="$1" \
+          --multi \
+          --select-1 \
+          --exit-0 \
+          --preview="${FZF_PREVIEW_CMD}" \
+          --preview-window='right:hidden:wrap' \
+          --bind=ctrl-v:toggle-preview \
+          --bind=ctrl-x:toggle-sort \
+          --header='(view:ctrl-v) (sort:ctrl-x)'
+    )"
+  ) || return
+  "${EDITOR:-vim}" "${files[@]}"
+}
+
+function back() {
+  cd ..
+  zle reset-prompt
+}
+
+function quickLs() {
+  echo
+  exa -aGx --icons --long --no-permissions --no-user --no-time --color-scale
+  zle reset-prompt
+}
+
+function goHome() {
+  cd ..
+  zle reset-prompt
+}
+
+function goMaster () {
+  git checkout master
+  zle reset-prompt
+}
+
+function openVim () {
+  [ -f Session.vim  ] && nvim -S || nvim 
+}
+
+function openFileManagerHere () {
+  xdg-open . >/dev/null 2>&1 &!
+}
+
+function searchInFiles () {
+(RELOAD='reload:rg --column --color=always --smart-case {q} || :'
+ OPENER='if [[ $FZF_SELECT_COUNT -eq 0 ]]; then
+           nvim {1} +{2}     # No selection. Open the current line in Vim.
+         else
+           nvim +cw -q {+f}  # Build quickfix list for the selected items.
+         fi'
+ fzf --disabled --ansi --multi \
+     --bind "start:$RELOAD" --bind "change:$RELOAD" \
+     --bind "enter:become:$OPENER" \
+     --bind "ctrl-o:execute:$OPENER" \
+     --bind 'alt-a:select-all,alt-d:deselect-all,ctrl-/:toggle-preview' \
+     --delimiter : \
+     --preview 'bat --style=full --color=always --highlight-line {2} {1}' \
+     --preview-window '~4,+{2}+4/3,<80(up)')
+}
+
+open() {
+  if [[ $# -eq 0 ]]; then
+    xdg-open . >/dev/null 2>&1 &!
+  else
+    for file in "$@"; do
+      xdg-open "$file" >/dev/null 2>&1 &!
+    done
+  fi
+}

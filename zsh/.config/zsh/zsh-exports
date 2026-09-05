@@ -1,0 +1,96 @@
+#!/bin/sh
+export HISTFILE=$HOME/.zsh_history
+export HISTSIZE=1000000
+export HISTIGNORE='exit:[ ]*'
+export SAVEHIST=1000000
+export MANPAGER='nvim +Man!'
+export MANWIDTH=999
+# eval "`pip completion --zsh`"
+# Speed up VI mode
+export KEYTIMEOUT=1
+export MANPATH="/usr/local/man:$MANPATH"
+export COLORTERM='truecolor'
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+
+# Usar vim como editor por defecto en ranger
+export EDITOR=nvim vifm
+
+# Usar el navegador preferido
+#export BROWSER=microsoft-edge
+#export BROWSER=vivaldi
+export BROWSER=$HOME/Desktop/zen/zen
+export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+
+export PATH=$PATH:$HOME/.cargo/bin
+export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:$HOME/.local/share/nvim/lsp_servers
+
+export PATH=$PATH:/usr/local/go
+export PATH=$PATH:${HOME}/go/bin
+export PATH=$PATH:${HOME}/.local/bin
+
+export PATH=$PATH:/bin
+export PATH=$PATH:/sbin
+export PATH=$PATH:/usr/bin
+export PATH=$PATH:/usr/sbin
+
+export PATH=$PATH:/usr/games
+export PATH=$PATH:/usr/local/bin
+export PATH=$PATH:/usr/local/sbin
+export PATH=$PATH:/usr/local/games
+
+export PATH=$PATH:${HOME}/.cargo/bin
+export PATH=$PATH:${HOME}/.local/npm-global/bin
+
+export PATH=$PATH:$HOME/dev/jsr/llvm/src/build/bin
+export LD_LIBRARY_PATH=$HOME/dev/jsr/llvm/src/build/lib:$LD_LIBRARY_PATH
+
+export PATH=$PATH:$HOME/.dotnet/tools
+export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+export FZF_COMPLETION_OPTS='--border --info=inline'
+
+#export RUSTC_WRAPPER=sccache
+
+# Use bat instead of cat
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export CARGO_TARGET_DIR=$HOME/.cache/cargo/cache
+
+export GPG_TTY=$(tty)
+
+# Ollama
+export OLLAMA_HOST=0.0.0.0
+export OLLAMA_VULKAN=1
+export OLLAMA_FLASH_ATTENTION=1
+export CUDA_VISIBLE_DEVICES=0
+export ROCR_VISIBLE_DEVICES=0
+export HSA_OVERRIDE_GFX_VERSION="9.0.0"
+
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8,bold"
+
+typeset -A ZSH_HIGHLIGHT_STYLES
+export ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
+export ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=cyan'
+export ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=yellow'
+export ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=yellow'
+export ZSH_HIGHLIGHT_STYLES[comment]='fg=8'
+export ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=red,underline'
+
+#typeset -A ZSH_HIGHLIGHT_HIGHLIGHTERS
+#export ZSH_HIGHLIGHT_HIGHLIGHTERS+=(brackets pattern cursor)
+export ZSH_HIGHLIGHT_HIGHLIGHTERS="main brackets pattern cursor"
+
+
+# Permitir que el plugin busque incluso con prefijos vacíos
+export ZSH_AUTOSUGGEST_STRATEGY=(history)
+#export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=0 # Asegura que no haya límite de tamaño
+export ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
