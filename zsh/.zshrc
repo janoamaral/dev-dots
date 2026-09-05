@@ -24,7 +24,7 @@ zle -N down-line-or-beginning-search
 # Normal files to source
 source ~/.config/zsh/functions
 source ~/.config/zsh/bindings
-source ~/.config/alias.sh
+source ~/.config/zsh/alias.sh
 source ~/.config/zsh/zsh-exports
 
 _fix_cursor() {
@@ -120,7 +120,7 @@ source <(kubectl completion zsh)
 # opencode
 export PATH=/home/logico/.opencode/bin:$PATH
 
-source ~/.config/ps1.sh
+source ~/.config/zsh/ps1.sh
 source ~/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
 
 function sparkle-cli-widget() {
