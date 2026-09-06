@@ -36,7 +36,7 @@ _fix_cursor() {
 
 # FZF
 # TODO update for mac
-[ -f ~/.fzf.zsh ] && source <(fzf --zsh)
+source <(fzf --zsh)
 export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always {}' --bind 'ctrl-/:change-preview-window(down|hidden|)'"
 export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
 export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
