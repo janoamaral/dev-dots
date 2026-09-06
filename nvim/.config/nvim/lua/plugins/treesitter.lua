@@ -1,9 +1,8 @@
 return {
     "nvim-treesitter/nvim-treesitter",
-    version = false,
+    branch = "master", -- Fix para versiones de Neovim < 0.12
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
-    main = "nvim-treesitter.configs", -- Indica a lazy.nvim qué módulo ejecutar con 'opts'
     dependencies = {
         "nvim-treesitter/nvim-treesitter-context",
         "nvim-treesitter/nvim-treesitter-textobjects",
@@ -76,4 +75,7 @@ return {
             },
         },
     },
+    config = function(_, opts)
+        require("nvim-treesitter.configs").setup(opts)
+    end,
 }
