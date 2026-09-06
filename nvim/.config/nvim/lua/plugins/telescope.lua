@@ -7,6 +7,7 @@ return {
     "nvim-telescope/telescope-ui-select.nvim",
     "fdschmidt93/telescope-egrepify.nvim",
     "andrew-george/telescope-themes",
+    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   },
   opts = {
     defaults = {
