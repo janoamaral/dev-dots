@@ -14,7 +14,7 @@ alias ls='ls --color=auto '
 alias ll='exa -aGx --icons --long --no-permissions --no-user --no-time --color-scale'
 alias free='free -h'
 alias google-chrome='google-chrome --enable-blink-features=MiddleClickAutoscroll'
-alias cat=bat
+alias cat=batcat
 
 # Varios
 alias calc=bc -i
