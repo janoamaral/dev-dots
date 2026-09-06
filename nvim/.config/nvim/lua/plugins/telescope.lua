@@ -25,5 +25,15 @@ return {
                 },
             },
         }
-    end
+    end,
+    config = function(_, opts)
+        local telescope = require("telescope")
+        telescope.setup(opts)
+
+        -- Carga explícita de extensiones registradas en dependencies
+        pcall(telescope.load_extension, "ui-select")
+        pcall(telescope.load_extension, "fzf")
+        pcall(telescope.load_extension, "egrepify")
+        pcall(telescope.load_extension, "themes")
+    end,
 }
