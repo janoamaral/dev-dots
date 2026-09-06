@@ -74,7 +74,7 @@ autoload bashcompinit && bashcompinit
 #zsh_add_file "zsh-vim-mode"
 
 eval "$(zoxide init zsh)"
-eval "$(navi widget zsh)"
+#eval "$(navi widget zsh)"
 
 # Edit line in vim with ctrl-e:
 autoload edit-command-line; zle -N edit-command-line
