@@ -3,7 +3,7 @@ return {
     version = false,
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
-    -- Quita 'lazy = false' para dejar que los 'event' manejen el lazy-loading correctamente
+    main = "nvim-treesitter.configs", -- Indica a lazy.nvim qué módulo ejecutar con 'opts'
     dependencies = {
         "nvim-treesitter/nvim-treesitter-context",
         "nvim-treesitter/nvim-treesitter-textobjects",
@@ -76,8 +76,4 @@ return {
             },
         },
     },
-    -- Garantiza que require("nvim-treesitter.configs") reciba la tabla opts en el momento correcto
-    config = function(_, opts)
-        require("nvim-treesitter.configs").setup(opts)
-    end,
 }
