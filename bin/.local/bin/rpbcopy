@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if command -v base64 >/dev/null 2>&1; then
+    payload="$(base64 | tr -d '\n')"
+else
+    echo "rpbcopy: base64 not found" >&2
+    exit 1
+fi
+
+printf '\033]52;c;%s\a' "$payload"

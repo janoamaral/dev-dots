@@ -51,7 +51,7 @@ o.path = "**"      -- Busca en los subdirectorios
 --o.t_Co = "256"                      -- Usar la terminal con 256 colores
 o.termguicolors = true      -- Usar la terminal con 256 colores
 
-o.clipboard = "unnamedplus" -- Usar el clipboard del sistema para copiar y pegar.
+o.clipboard = "osc52" -- Soporta el portapapeles del sistema operativo
 
 -- set iskeyword-=-_                  -- Sacar - y _ como parte de palabra
 o.expandtab = true  -- Usar espacios en vez de tabs
