@@ -51,7 +51,7 @@ o.path = "**"      -- Busca en los subdirectorios
 --o.t_Co = "256"                      -- Usar la terminal con 256 colores
 o.termguicolors = true      -- Usar la terminal con 256 colores
 
-o.clipboard = "osc52" -- Soporta el portapapeles del sistema operativo
+o.clipboard = "unnamedplus" -- Usar el clipboard del sistema para copiar y pegar.
 
 -- set iskeyword-=-_                  -- Sacar - y _ como parte de palabra
 o.expandtab = true  -- Usar espacios en vez de tabs
@@ -85,6 +85,7 @@ o.signcolumn = "yes"
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.clipboard = "osc52"
 
 vim.cmd([[
 let g:closetag_filetypes = 'html,xhtml,jsx,javascript,javascriptreact,typescript.tsx'
